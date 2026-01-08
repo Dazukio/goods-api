@@ -136,12 +136,6 @@ db_secrets_example.yml
 * учебный проект
 * playground для backend / DevOps практик
 
----
-
-## 👤 Автор
-
-**Dazukio**
-GitHub: [https://github.com/Dazukio](https://github.com/Dazukio)
 
 ---
 
@@ -173,7 +167,3 @@ The project focuses on:
 
 ---
 
-## 🧑‍💻 Author
-
-**Dazukio**
-GitHub: [https://github.com/Dazukio](https://github.com/Dazukio)

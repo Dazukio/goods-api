@@ -1,0 +1,11 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config 
+  # labels and annotations can also be added here
+data:
+  # Key-value pairs for configuration data
+  DB_HOST: postgres-service 
+  DB_PORT: "5432"
+  DB_NAME: goods_db

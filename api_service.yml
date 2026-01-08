@@ -1,0 +1,13 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: goods-app-service # The name of the service
+spec:
+  selector:
+    app: backend # Selects Pods with the label "app: my-app"
+  ports:
+    - protocol: TCP
+      port: 80 # The port the Service itself exposes
+      targetPort: 8000 # The port the container is listening on
+  type: ClusterIP # Exposes the Service on an internal cluster IP

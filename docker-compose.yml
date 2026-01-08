@@ -1,6 +1,6 @@
 services:
   api:
-    image: dazukio/goods-api:1.0.0
+    image: dazukio/goods-api:1.1.0
     ports:
       - "8000:8000"
     container_name: goods-api-app
@@ -31,6 +31,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 volumes:
   postgres_data:

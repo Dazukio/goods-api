@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goods-api"
-version = "0.1.0"
+version = "1.1.0"
 description = ""
 authors = ["Timofey <dziamidau@fenion.at>"]
 readme = "README.md"
@@ -15,7 +15,7 @@ sqlmodel = "^0.0.24"
 asyncpg = "^0.30.0"
 uvicorn = "^0.34.0"
 greenlet = "^3.1.1"
-
+prometheus_client = "^0.20"
 
 [build-system]
 requires = ["poetry-core"]

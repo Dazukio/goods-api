@@ -1,8 +1,11 @@
 from typing import List
+
+from app.metrics.goods import goods_created_total
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
+from app.metrics.goods import goods_deleted_total
 from app.database.db import get_session
 from app.goods.models.goods import Goods, GoodsCreate, GoodsUpdate
 
@@ -79,3 +82,19 @@ async def delete_goods(goods_id: int, session: AsyncSession = Depends(get_sessio
     await session.delete(db_goods)
     await session.commit()
     return None
+
+
+@router.post("/", response_model=Goods, status_code=status.HTTP_201_CREATED)
+async def create_goods(
+    goods: GoodsCreate, session: AsyncSession = Depends(get_session)
+):
+    db_goods = Goods(**goods.model_dump())
+    session.add(db_goods)
+    await session.commit()
+    await session.refresh(db_goods)
+
+    goods_created_total.inc()
+
+    return db_goods
+
+

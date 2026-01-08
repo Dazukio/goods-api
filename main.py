@@ -1,13 +1,19 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Response
 from pydantic import ValidationError
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 import uvicorn
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
+from app.middleware.prometheus import prometheus_middleware
 from app.database.db import init_db
 from app.goods.routers.goods import router as router_goods
 
+
+app = FastAPI()
+
+app.middleware("http")(prometheus_middleware)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -39,6 +45,12 @@ async def pong():
 async def test():
     return {"hello": "world!"}
 
+@app.get("/metrics")
+def metrics():
+    return Response(
+        generate_latest(),
+        media_type=CONTENT_TYPE_LATEST
+    )
 
 app.include_router(router_goods)
 

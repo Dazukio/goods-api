@@ -1,80 +1,140 @@
-# goods-api
+# Goods API
 
-## 🇷🇺 Описание (RU)
+## 🇷🇺 Описание (Russian)
 
-**goods-api** — это backend-сервис для управления товарами.
-Проект задуман как учебно-практический API с упором на:
+**Goods API** — учебный / pet-проект backend-сервиса для работы с товарами.
+Проект демонстрирует типичную архитектуру API-приложения на Python с разделением на домены, конфигурацию, инфраструктуру и деплой.
 
-* чистую структуру,
-* контейнеризацию,
-* инфраструктуру,
-* CI/CD и DevOps-подходы.
+Цель проекта:
 
-Репозиторий используется для экспериментов с архитектурой, Docker, Kubernetes, Terraform и автоматизацией процессов разработки.
+* отработать структуру backend-приложения
+* показать работу с БД
+* подготовить сервис к контейнеризации и деплою
+* приблизиться к real-world backend разработке
 
 ---
 
-## 🚀 Основные возможности
+## 🚀 Возможности
 
 * REST API для работы с товарами
-* Python backend (структурированный по модулям)
-* Docker / Docker Compose
-* Подготовка к деплою в Kubernetes
-* Infrastructure as Code (Terraform)
-* CI (пример конфигурации)
+* Чёткое разделение слоёв (routers / models / database)
+* Конфигурация через YAML
+* Docker и docker-compose
+* Kubernetes manifests
+* Terraform конфигурация
+* Poetry для управления зависимостями
 
 ---
 
-## 🧱 Структура проекта
+## 📂 Структура проекта
 
 ```text
 .
-├── app/                    # Приложение
-│   ├── goods/              # Логика товаров
-│   ├── database/           # Работа с БД
-│   └── config/             # Конфигурация
-├── Dockerfile
-├── docker-compose.yml
-├── main.py
-├── pyproject.toml
-├── terraform / k8s yaml
-└── README.md
+├── api_deployment.yml        # Kubernetes Deployment для API
+├── api_service.yml           # Kubernetes Service для API
+├── app/                      # Основное приложение
+│   ├── config/               # Конфигурация приложения
+│   │   └── conf.py
+│   ├── database/             # Работа с базой данных
+│   │   ├── db.py
+│   │   └── __init__.py
+│   ├── goods/                # Домен "товары"
+│   │   ├── models/           # Модели данных
+│   │   │   ├── goods.py
+│   │   │   └── __init__.py
+│   │   ├── routers/          # HTTP роуты
+│   │   │   ├── goods.py
+│   │   │   └── __init__.py
+│   │   └── __init__.py
+│   └── __init__.py
+├── db_config.yml             # Конфигурация БД
+├── db_secrets_example.yml    # Пример secrets (без реальных данных)
+├── db_secrets.yml            # Реальные secrets (не должен попадать в git)
+├── docker-compose.yml        # Локальный запуск
+├── Dockerfile                # Docker образ приложения
+├── main.py                   # Точка входа
+├── main.tf                   # Terraform конфигурация
+├── postgres_pvc.yml          # Kubernetes PVC для Postgres
+├── postgres_service.yml      # Kubernetes Service для Postgres
+├── postgres_stateful.yml     # Kubernetes StatefulSet для Postgres
+├── pyproject.toml            # Poetry конфигурация
+├── poetry.lock
+├── README.md
+└── LICENSE
 ```
 
 ---
 
-## ▶️ Запуск локально
-
-### 1. Клонирование репозитория
-
-```bash
-git clone git@github.com:Dazukio/goods-api.git
-cd goods-api
-```
-
-### 2. Запуск через Docker Compose
+## 🐳 Запуск через Docker
 
 ```bash
 docker-compose up --build
 ```
 
+После запуска API будет доступен локально (адрес зависит от конфигурации).
+
 ---
 
-## 🛠 Используемые технологии
+## ☸ Kubernetes
+
+В репозитории присутствуют манифесты для деплоя:
+
+* API
+* PostgreSQL (StatefulSet + PVC + Service)
+
+Файлы:
+
+* `api_deployment.yml`
+* `api_service.yml`
+* `postgres_stateful.yml`
+* `postgres_pvc.yml`
+* `postgres_service.yml`
+
+---
+
+## 🧱 Terraform
+
+Файл `main.tf` содержит базовую Terraform-конфигурацию и может быть использован
+для развёртывания инфраструктуры (в зависимости от выбранного провайдера).
+
+---
+
+## 🔐 Secrets
+
+⚠️ **Важно**
+
+Файл `db_secrets.yml`:
+
+* содержит чувствительные данные
+* **не должен быть закоммичен**
+* используется только локально или через CI/CD
+
+В репозитории хранится только:
+
+```text
+db_secrets_example.yml
+```
+
+---
+
+## 🛠 Технологии
 
 * Python
-* Docker / Docker Compose
+* FastAPI (или аналогичный ASGI-фреймворк)
 * PostgreSQL
-* Kubernetes (YAML manifests)
+* Docker / Docker Compose
+* Kubernetes
 * Terraform
-* GitHub
+* Poetry
 
 ---
 
 ## 📌 Статус проекта
 
-Проект находится в активной разработке и используется в учебных и практических целях.
-Функциональность и структура могут меняться.
+Проект находится в активной разработке и используется как:
+
+* учебный проект
+* playground для backend / DevOps практик
 
 ---
 
@@ -87,41 +147,33 @@ GitHub: [https://github.com/Dazukio](https://github.com/Dazukio)
 
 ---
 
-## 🇬🇧 Description (EN)
+## 🇬🇧 Description (English)
 
-**goods-api** is a backend service for managing goods.
-This project is built as a practice-oriented API with a focus on:
+**Goods API** is a backend pet project that demonstrates a typical API service architecture built with Python.
 
-* clean architecture,
-* containerization,
-* infrastructure,
-* CI/CD and DevOps practices.
+The project focuses on:
 
-The repository is used for experimenting with architecture, Docker, Kubernetes, Terraform, and automation workflows.
+* clean backend structure
+* database interaction
+* containerization
+* Kubernetes deployment
+* infrastructure as code basics
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
 * REST API for goods management
-* Modular Python backend
-* Docker & Docker Compose support
-* Kubernetes deployment manifests
-* Infrastructure as Code (Terraform)
-* CI configuration example
+* Modular application structure
+* YAML-based configuration
+* Docker & Docker Compose
+* Kubernetes manifests
+* Terraform configuration
+* Poetry dependency management
 
 ---
 
-## ▶️ Local run
+## 🧑‍💻 Author
 
-```bash
-git clone git@github.com:Dazukio/goods-api.git
-cd goods-api
-docker-compose up --build
-```
-
----
-
-## 📄 License
-
-MIT (or specify another license if needed)
+**Dazukio**
+GitHub: [https://github.com/Dazukio](https://github.com/Dazukio)

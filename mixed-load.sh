@@ -1,26 +1,39 @@
 #!/bin/bash
-# mixed-load.sh
 
-# Разные эндпоинты
+echo "Load test"
+echo "Start: $(date '+%H:%M:%S')"
+echo ""
+
+# Endpoints to test
 declare -A endpoints=(
   ["GET /goods"]="http://localhost:8000/goods/"
   ["GET /docs"]="http://localhost:8000/docs"
   ["GET /metrics"]="http://localhost:8000/metrics"
 )
 
-# Запускаем нагрузку на каждый эндпоинт
+# Test each endpoint
 for desc in "${!endpoints[@]}"; do
   url="${endpoints[$desc]}"
-  echo "Запуск нагрузки на: $desc"
-  ab -n 1000 -c 10 -k "$url" >"results_${desc//\//_}.txt" 2>&1 &
+
+  echo "Testing: $desc"
+  echo "URL: $url"
+  echo "--------------------------------"
+
+  # Run Apache Bench
+  ab -n 1000 -c 10 -k -q "$url" 2>/dev/null |
+    grep -E "(Requests per second:|Time per request:|Failed requests:|Transfer rate:)" |
+    sed 's/^/  /'
+
+  echo ""
+  sleep 1
 done
 
-# Ждем завершения всех
-wait
+echo "Test completed"
+echo "End: $(date '+%H:%M:%S')"
 
-# Сводка
-echo -e "\n=== Сводка результатов ==="
-for file in results_*.txt; do
-  echo "--- $file ---"
-  grep -E "(Requests per second:|Time per request:|Transfer rate:)" "$file"
-done
+# (Optional) Check Prometheus metrics
+echo ""
+echo "Checking metrics..."
+echo "Service status:"
+curl -s "http://localhost:9090/api/v1/query?query=up{job='goods-api'}" |
+  jq -r '.data.result[0].value[1] // "unknown"' 2>/dev/null

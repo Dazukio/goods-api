@@ -1,3 +1,4 @@
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status, Response
 from pydantic import ValidationError
@@ -10,10 +11,6 @@ from app.middleware.prometheus import prometheus_middleware
 from app.database.db import init_db
 from app.goods.routers.goods import router as router_goods
 
-
-app = FastAPI()
-
-app.middleware("http")(prometheus_middleware)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,6 +25,8 @@ app = FastAPI(
     description="Goods tool backend API.",
 )
 
+app.middleware("http")(prometheus_middleware)
+
 
 @app.exception_handler(ValidationError)
 async def validation_exception_handler(request: Request, exc: ValidationError):
@@ -41,9 +40,11 @@ async def validation_exception_handler(request: Request, exc: ValidationError):
 async def pong():
     return {"ping": "pong!"}
 
+
 @app.get("/test")
 async def test():
     return {"hello": "world!"}
+
 
 @app.get("/metrics")
 def metrics():
@@ -51,6 +52,7 @@ def metrics():
         generate_latest(),
         media_type=CONTENT_TYPE_LATEST
     )
+
 
 app.include_router(router_goods)
 

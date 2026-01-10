@@ -60,6 +60,7 @@
 ├── db_secrets_example.yml
 ├── docker-compose.yml
 ├── Dockerfile
+├── init-db.sh
 ├── LICENSE
 ├── main.py
 ├── main.tf
@@ -93,7 +94,7 @@
   - Настроить алерты на основе метрик
   - Добавить конфигурацию Grafana в docker-compose и Kubernetes
 
-- [ ] **Реализовать логирование с помощью Loki + Promtail**
+- [x] **Реализовать логирование с помощью Loki + Promtail**
   - Настроить сбор логов приложения
   - Интегрировать с Grafana для единого интерфейса
   - Создать дашборды для анализа логов
@@ -203,7 +204,7 @@ db_secrets_example.yml
 - [x] Конфигурация Kubernetes
 - [x] Метрики Prometheus
 - [x] Дашборды Grafana
-- [ ] **Логирование Loki+Promtail**
+- [x] **Логирование Loki+Promtail**
 - [ ] **Полное мониторинговое решение**
 
 Используется как:
